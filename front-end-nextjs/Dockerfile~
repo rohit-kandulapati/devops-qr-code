@@ -21,6 +21,4 @@ COPY --from=builder /app/package*.json .
 
 EXPOSE 3000
 
-USER 1001
-
 CMD ["npm", "start"]

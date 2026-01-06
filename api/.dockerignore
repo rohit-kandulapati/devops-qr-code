@@ -1,2 +1,6 @@
-Dockerfile
-Dockerfile-2
+.venv
+__pycache__
+*.pyc
+.git
+.gitignore
+node_modules

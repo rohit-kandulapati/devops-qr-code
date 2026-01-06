@@ -18,6 +18,15 @@ app = FastAPI()
 
 # Allowing CORS for EKS
 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # AWS S3 Configuration
 s3 = boto3.client('s3')
 
