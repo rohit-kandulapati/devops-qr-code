@@ -1,0 +1,47 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: frontend-nextjs
+  labels:
+    app: frontend-nextjs
+spec:
+  selector:
+    matchLabels:
+      app: frontend-nextjs
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: frontend-nextjs
+    spec:
+      containers:
+      - image: rohitkalyan18/devops-qrcode:frontend-nextjs
+        name: frontend-nextjs
+        ports:
+        - containerPort: 3000
+        env:
+        - name: API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: api-url
+              key: api_url
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: frontend-nextjs
+spec:
+  selector:
+    app: frontend-nextjs
+  type: ClusterIP
+  ports:
+  - targetPort: 3000
+    protocol: TCP
+    port: 80
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: api-url 
+data:
+  api_url: http://python-api:8000

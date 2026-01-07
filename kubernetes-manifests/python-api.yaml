@@ -1,0 +1,59 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: python-api
+  labels:
+    app: python-api
+spec:
+  selector:
+    matchLabels:
+      app: python-api
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: python-api
+    spec:
+      containers:
+      - image: rohitkalyan18/devops-qrcode:python-api
+        name: python-api
+        ports:
+        - containerPort: 8000
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: aws
+              key: AWS_ACCESS_KEY
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: aws
+              key: AWS_SECRET_ACCESS_KEY
+        - name: BUCKET_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: bucket-name
+              key: bucket_name
+        - name: AWS_REGION
+          value: "us-west-2"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: python-api
+spec:
+  selector:
+    app: python-api
+  type: ClusterIP
+  ports:
+  - targetPort: 8000
+    protocol: TCP
+    port: 8000
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: bucket-name 
+data:
+  bucket_name: devops-qrcode-rohitkalyan

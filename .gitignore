@@ -1,0 +1,2 @@
+*/secret.yaml
+## secret is only used for local kind testing, for eks we use irsa
