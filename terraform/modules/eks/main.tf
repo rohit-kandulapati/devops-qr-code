@@ -79,6 +79,9 @@ resource "aws_eks_node_group" "example" {
   node_group_name = each.key
   node_role_arn   = aws_iam_role.node.arn
   subnet_ids      = var.subnet_ids
+  
+  instance_types = each.value.instance_types
+  capacity_type = each.value.capacity_type
 
   scaling_config {
     desired_size = each.value.scaling_config.desired_size

@@ -46,7 +46,7 @@ variable "node_groups" {
   }))
   default = {
     default_group = {
-      instance_types = ["t3.micro"]
+      instance_types = ["m7i-flex.large"]
       capacity_type = "ON_DEMAND"
       scaling_config = {
         desired_size = 1

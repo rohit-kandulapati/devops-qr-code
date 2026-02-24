@@ -38,7 +38,7 @@ resource "aws_subnet" "public_subnets" {
     {
         Name = "${var.project_name}-public-subn-${var.azs[count.index]}"
         "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-        "kubernetes.io/role/internal-elb" = "1"
+        "kubernetes.io/role/elb" = "1"
     }
   )
 }
@@ -111,5 +111,5 @@ resource "aws_route" "r" {
 resource "aws_route_table_association" "private-rta" {
   count = length(var.private_subnets)
   route_table_id = aws_route_table.private-rt[count.index].id 
-  subnet_id = aws_route_table.private-rt[count.index].id
+  subnet_id = aws_subnet.private_subnets[count.index].id
 }
