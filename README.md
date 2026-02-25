@@ -9,3 +9,8 @@ The cors issues - commented the cors middleware section.
 - Re-build the images and test in local kind.
 - Push them if they are working to dockerhub.
 - Remove the accesskeys as envs in yaml manifests 
+
+
+aws eks update-kubeconfig --name qrcode --region us-east-1
+
+[AWS Policy Generator](https://awspolicygen.s3.amazonaws.com/policygen.html)
