@@ -11,5 +11,9 @@ output "vpc-id" {
 }
 
 output "oidc-issuer" {
-  value = module.eks.cluster_name.identity[0].oidc[0].list
+  value = data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer
+}
+
+output "s3-iam-role-arn" {
+  value = aws_iam_role.s3-role.arn
 }

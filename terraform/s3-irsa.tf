@@ -11,6 +11,12 @@ resource "aws_s3_bucket_public_access_block" "bucket-block" {
   restrict_public_buckets = true
 }
 
+resource "aws_iam_openid_connect_provider" "oidc_arn" {
+  url             = data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = [data.tls_certificate.oidc.certificates[0].sha1_fingerprint]
+}
+
 resource "aws_iam_role" "s3-role" {
   name = "irsa-s3-role"
 
@@ -19,7 +25,7 @@ resource "aws_iam_role" "s3-role" {
     Statement = [{
       Effect = "Allow"
       Principal = {
-        Federated = data.aws_iam_openid_connect_provider.oidc_arn.arn
+        Federated = aws_iam_openid_connect_provider.oidc_arn.arn
       }
       Action = "sts:AssumeRoleWithWebIdentity"
       Condition = {
