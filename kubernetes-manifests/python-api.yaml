@@ -14,9 +14,9 @@ spec:
       labels:
         app: python-api
     spec:
-      serviceAccount: ## add service account
+      serviceAccount: s3-getput ## add service account
       containers:
-      - image: rohitkalyan18/devops-qrcode:python-api
+      - image: docker.io/rohitkalyan18/devops-qrcode:python-api-v3
         name: python-api
         ports:
         - containerPort: 8000
@@ -37,7 +37,7 @@ spec:
               name: bucket-name
               key: bucket_name
         - name: AWS_REGION
-          value: "us-west-2"
+          value: "us-east-1"
 ---
 kind: Service
 apiVersion: v1
@@ -57,4 +57,4 @@ apiVersion: v1
 metadata:
   name: bucket-name 
 data:
-  bucket_name: devops-qrcode-rohitkalyan
+  bucket_name: qrcode-rohit-kalyan

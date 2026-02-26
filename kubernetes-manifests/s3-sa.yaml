@@ -1,6 +1,7 @@
-kind: serviceAccount
 apiVersion: v1
+kind: ServiceAccount
 metadata:
-  name: s3-bucket
-  kubernetes: 
-spec:
+  name: s3-getput
+  namespace: default
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::747289879815:role/irsa-s3-role
