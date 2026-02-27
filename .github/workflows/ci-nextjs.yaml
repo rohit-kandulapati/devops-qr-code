@@ -9,7 +9,7 @@ on:
 jobs:
   docker:
     env:
-      REPOSITORY: devops-qrcode
+      REPOSITORY: qrcode-nextjs-frontend
     name: Docker Build and push image
     runs-on: ubuntu-latest
     steps:
