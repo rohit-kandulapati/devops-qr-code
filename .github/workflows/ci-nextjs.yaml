@@ -1,0 +1,55 @@
+name: CI NextJS Frontend
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+    paths:
+    - 'front-end-nextjs/**' # at any depth
+jobs:
+  docker:
+    env:
+      REPOSITORY: devops-qrcode
+    name: Docker Build and push image
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout Code
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    
+    - name: Setup Docker
+      uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+
+    - name: Login to Dockerhub
+      uses: docker/login-action@v3.7.0
+      with:
+        username: ${{ vars.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+    - name: Extract metadata of the image
+      id: meta 
+      uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
+      with:
+        images: ${{ var.DOCKERHUB_USERNAME }}/${{ env.REPOSITORY }}
+        tags: |
+          type=sha, format=long 
+      
+    - name: Build the Docker image
+      uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
+      with:
+        push: false
+        context: front-end-nextjs
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+    
+    - name: Push the Docker image
+      uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
+      with:
+        push: true
+        context: front-end-nextjs
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+      
+    - name: Set Image Tag Output 
+      id: set-output 
+      run: echo "image_tag=sha${GITHUB_SHA}"
