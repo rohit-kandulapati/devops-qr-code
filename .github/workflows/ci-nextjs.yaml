@@ -6,10 +6,10 @@ on:
     - main
     paths:
     - 'front-end-nextjs/**' # at any depth
+env:
+  REPOSITORY: qrcode-nextjs-frontend
 jobs:
   docker:
-    env:
-      REPOSITORY: qrcode-nextjs-frontend
     name: Docker Build and push image
     runs-on: ubuntu-latest
     steps:
@@ -42,6 +42,8 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
     
+  ## Will add trivy image scan
+
     - name: Push the Docker image
       uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
       with:
@@ -52,4 +54,36 @@ jobs:
       
     - name: Set Image Tag Output 
       id: set-output 
-      run: echo "image_tag=sha${GITHUB_SHA}"
+      run: | 
+        echo "image_tag=sha-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+        echo "image_full={{ vars.DOCKERHUB_USERNAME }}/{{ env.REPOSITORY }}:sha-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+
+  update-k8-manifest:
+    runs-on: ubuntu-latest
+    needs:
+    - docker
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      with:
+        token: ${{ secrets.TOKEN }}
+    
+    - name: Git config setup
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+    
+    - name: K8 Manifest update
+      env:
+        NEW_IMAGE=${{ needs.docker.outputs.image_full }}
+      run: |
+        sed -i 's|image: .*|image: ${NEW_IMAGE}' kubernetes-manifests/frontend-nextjs.yaml
+        echo 'Updated the new tag in the K8 manifest file. \n New Image ${NEW_IMAGE}'
+        grep -n 'image' kubernetes-manifests/frontend-nextjs.yaml
+    
+    - name: Commit K8 changes
+      run: |
+        git add kubernetes-manifests/frontend-nextjs.yaml
+        git commit -m 'Updated image tag to ${{ needs.docker.output.image_tag }}' || echo 'No changes to commit'
+        git push
+
