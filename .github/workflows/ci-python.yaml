@@ -86,7 +86,7 @@ jobs:
     
     - name: Commit K8 changes
       run: |
-        git add kubernetes-manifests/frontend-nextjs.yaml
+        git add kubernetes-manifests/python-api.yaml
         git commit -m "Updated image tag to ${{ needs.docker.outputs.image_tag }}" || echo "No changes to commit"
         git push
 
