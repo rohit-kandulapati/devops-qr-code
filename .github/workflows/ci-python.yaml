@@ -12,7 +12,7 @@ jobs:
   docker:
     name: Docker Build and push image
     runs-on: ubuntu-latest
-    ouputs:
+    outputs:
       image_tag: ${{ steps.set-output.outputs.image_tag }}
       image_full: ${{ steps.set-output.outputs.image_full }}
     steps:
