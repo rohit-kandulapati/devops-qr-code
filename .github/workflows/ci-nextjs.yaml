@@ -77,7 +77,7 @@ jobs:
       env:
         NEW_IMAGE: ${{ needs.docker.outputs.image_full }}
       run: |
-        sed -i 's|image: .*|image: ${NEW_IMAGE}' kubernetes-manifests/frontend-nextjs.yaml
+        sed -i "s|image: .*|image: ${NEW_IMAGE}|" kubernetes-manifests/frontend-nextjs.yaml
         echo 'Updated the new tag in the K8 manifest file. \n New Image ${NEW_IMAGE}'
         grep -n 'image' kubernetes-manifests/frontend-nextjs.yaml
     
