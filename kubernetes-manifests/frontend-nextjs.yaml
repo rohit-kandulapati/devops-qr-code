@@ -15,7 +15,7 @@ spec:
         app: frontend-nextjs
     spec:
       containers:
-      - image: docker.io/rohitkalyan18/devops-qrcode:frontend-nextjs
+      - image: 
         name: frontend-nextjs
         ports:
         - containerPort: 3000
