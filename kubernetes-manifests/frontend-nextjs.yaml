@@ -15,7 +15,7 @@ spec:
         app: frontend-nextjs
     spec:
       containers:
-      - image: 
+      - image: {{ vars.DOCKERHUB_USERNAME }}/{{ env.REPOSITORY }}:sha-0886a7412a6989ee64b0f3c7c15ff363e3a3138b
         name: frontend-nextjs
         ports:
         - containerPort: 3000
