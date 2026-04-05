@@ -38,23 +38,3 @@ spec:
               key: bucket_name
         - name: AWS_REGION
           value: "us-east-1"
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: python-api
-spec:
-  selector:
-    app: python-api
-  type: ClusterIP
-  ports:
-  - targetPort: 8000
-    protocol: TCP
-    port: 8000
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: bucket-name 
-data:
-  bucket_name: qrcode-rohit-kalyan

@@ -25,23 +25,3 @@ spec:
             configMapKeyRef:
               name: api-url
               key: api_url
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: frontend-nextjs
-spec:
-  selector:
-    app: frontend-nextjs
-  type: ClusterIP
-  ports:
-  - targetPort: 3000
-    protocol: TCP
-    port: 80
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: api-url 
-data:
-  api_url: http://python-api.default.svc.cluster.local:8000
