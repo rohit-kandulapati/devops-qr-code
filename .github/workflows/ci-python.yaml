@@ -82,11 +82,11 @@ jobs:
       run: |
         sed -i "s|image: .*|image: ${NEW_IMAGE}|" kubernetes-manifests/python-api.yaml
         echo "Updated the new tag in the K8 manifest file. New Image ${NEW_IMAGE}"
-        grep -n 'image' kubernetes-manifests/python-api.yaml
+        grep -n 'image' kubernetes-manifests/python-deployment.yaml
     
     - name: Commit K8 changes
       run: |
-        git add kubernetes-manifests/python-api.yaml
+        git add kubernetes-manifests/python-deployment.yaml
         git commit -m "Updated image tag to ${{ needs.docker.outputs.image_tag }}" || echo "No changes to commit"
         git push
 
