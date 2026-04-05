@@ -3,8 +3,14 @@
 
 .terraform/
 */.terraform
+*/*/.terraform
 
 *.tfstate
 */*.tfstate
 .terraform*
 */.terraform.lock.hcl
+
+*.tfstate
+*/*/*.tfstate
+.terraform*
+*/*/.terraform.lock.hcl
