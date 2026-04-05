@@ -12,7 +12,7 @@ resource "aws_s3_bucket_public_access_block" "bucket-block" {
 }
 
 resource "aws_iam_openid_connect_provider" "oidc_arn" {
-  url             = data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer
+  url             = data.terraform_remote_state.eks.outputs.oidc_issuer
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = [data.tls_certificate.oidc.certificates[0].sha1_fingerprint]
 }
