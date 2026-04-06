@@ -59,7 +59,7 @@ jobs:
       id: set-output 
       run: | 
         echo "image_tag=sha-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
-        echo "image_full={{ vars.DOCKERHUB_USERNAME }}/{{ env.REPOSITORY }}:sha-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+        echo "image_full=${{ vars.DOCKERHUB_USERNAME }}/${{ env.REPOSITORY }}:sha-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
 
   update-k8-manifest:
     runs-on: ubuntu-latest
