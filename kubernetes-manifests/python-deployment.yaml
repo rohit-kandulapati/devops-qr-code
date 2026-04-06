@@ -16,7 +16,7 @@ spec:
     spec:
       serviceAccount: s3-getput ## add service account
       containers:
-      - image: rohitkalyan18/python-api:sha-03e862dd3ef722eebcc9060fdda55bf602157928
+      - image: rohitkalyan18/python-api:sha-147e05a68597e0d1b349fec334046aa8020c4fa8
         name: python-api
         ports:
         - containerPort: 8000
