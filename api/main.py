@@ -94,7 +94,7 @@ async def root():
 
 @app.get("/health")
 async def health():
-    """Health check endpoint for Kubernetes probes"""
+    """Health Check endpoint for Kubernetes probes"""
     try:
         # Verify S3 access as part of health check
         s3.head_bucket(Bucket=bucket_name)
