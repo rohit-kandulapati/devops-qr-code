@@ -15,20 +15,24 @@ aws eks update-kubeconfig --name qrcode --region us-east-1
 
 [AWS Policy Generator](https://awspolicygen.s3.amazonaws.com/policygen.html)
 
+```
+## kubernetes.io/role/elb=1
+```
+
 ## Ingress Controller using Helm
 [Ingress Controller](https://docs.aws.amazon.com/eks/latest/userguide/lbc-helm.html)
 ```Bash
 curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.14.1/docs/install/iam_policy.json
 
-aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json
+aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy2 --policy-document file://iam_policy.json
 
 eksctl create iamserviceaccount \
-    --cluster=<cluster-name> \
+    --cluster=qrcode \
     --namespace=kube-system \
     --name=aws-load-balancer-controller \
-    --attach-policy-arn=arn:aws:iam::<AWS_ACCOUNT_ID>:policy/AWSLoadBalancerControllerIAMPolicy \
+    --attach-policy-arn=arn:aws:iam::747289879815:policy/AWSLoadBalancerControllerIAMPolicy2 \
     --override-existing-serviceaccounts \
-    --region <aws-region-code> \
+    --region us-east-1 \
     --approve
 
 helm repo add eks https://aws.github.io/eks-charts
@@ -37,10 +41,19 @@ helm repo update eks
 
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   -n kube-system \
-  --set clusterName=my-cluster \
+  --set clusterName=qrcode \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller \
   --version 1.14.0
+
+helm upgrade aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=qrcode \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller \
+  --set vpcId=<vpc-id> \
+  --version 1.14.0
+
 ```
 
 ## Tools Installation
@@ -54,4 +67,11 @@ sudo apt update && sudo apt install terraform
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
+
+## helm installation
+sudo apt-get install curl gpg apt-transport-https --yes
+curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+echo "deb [signed-by=/usr/share/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt-get install helm
 ```
