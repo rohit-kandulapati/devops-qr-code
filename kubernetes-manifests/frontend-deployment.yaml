@@ -15,7 +15,7 @@ spec:
         app: frontend-nextjs
     spec:
       containers:
-      - image: {{ vars.DOCKERHUB_USERNAME }}/{{ env.REPOSITORY }}:sha-c3033d94cf431feaefabe01c669afeb7920441d0
+      - image: rohitkalyan18/qrcode-nextjs-frontend:sha-c185c5e2228081e67d09e5807c2d9b166315c9e8
         name: frontend-nextjs
         ports:
         - containerPort: 3000
