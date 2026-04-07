@@ -1,0 +1,9 @@
+{{- if .Values.config }}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: api-url
+  namespace: {{ .Values.namespace }}
+data:
+  api_url: "http://{{ .Values.api.name }}-service.{{.Values.namespace }}.svc.cluster.local:{{ .Values.api.service.port }}"
+{{- end }}

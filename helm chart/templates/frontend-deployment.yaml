@@ -1,0 +1,32 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ .Values.frontend.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "frontend.labels" . | nindent 4}}
+spec:
+  selector:
+    matchLabels:
+      {{- include "frontend.labels" . | nindent 6 }}
+  replicas: {{ .Values.frontend.replicaCount }}
+  template:
+    metadata:
+      labels:
+        {{- include "frontend.labels" . | nindent 8}}
+    spec:
+      containers:
+      - image: "{{ .Values.frontend.image.username }}/{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+        name: {{ .Values.frontend.name }}
+        ports:
+        - containerPort: {{ .Values.frontend.service.port }}
+        env:
+        - name: API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: api-url
+              key: api_url
+        {{- if .Values.frontend.resources }}
+        resources:
+          {{- toYaml .Values.frontend.resources | nindent 10 }}
+        {{- end }}

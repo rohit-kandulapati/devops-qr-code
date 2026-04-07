@@ -1,0 +1,51 @@
+api:
+  name: python-api
+  replicaCount: 1
+  image:
+    username: rohitkalyan18
+    repository: python-api
+    tag: sha-147e05a68597e0d1b349fec334046aa8020c4fa8
+  service:
+    port: 8000
+  resources:
+    requests:
+      cpu: 10m
+      memory: 50Mi
+    limits:
+      cpu: 100m 
+      memory: 100Mi
+
+frontend:
+  name: frontend-nextjs
+  replicaCount: 1
+  image:
+    username: rohitkalyan18
+    repository: qrcode-nextjs-frontend
+    tag: sha-c185c5e2228081e67d09e5807c2d9b166315c9e8
+  service:
+    port: 3000
+  resources:
+    requests:
+      cpu: 10m
+      memory: 100Mi
+    limits:
+      cpu: 100m 
+      memory: 200Mi
+
+namespace: default
+
+irsa_role_arn: arn:aws:iam::747289879815:role/irsa-s3-role
+
+application_name: qrcode
+
+config:
+  bucket_name: qrcode-rohit-kalyan
+  aws_region: "us-east-1"
+
+ingress:
+  enabled: true
+  ingressClass: alb
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/target-type: ip

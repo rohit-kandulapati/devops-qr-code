@@ -1,0 +1,6 @@
+apiVersion: v2
+name: QRCode - 
+description: Helm Chart for qrcode generator python-api
+type: application
+version: 0.1.0
+appVersion: 147e05a68597e0d1b349fec334046aa8020c4fa8

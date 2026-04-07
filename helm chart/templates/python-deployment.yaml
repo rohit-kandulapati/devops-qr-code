@@ -1,0 +1,35 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ .Values.api.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "api.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "api.labels" . | nindent 6 }}
+  replicas: {{ .Values.api.replicaCount }}
+  template:
+    metadata:
+      labels:
+        {{- include "api.labels" . | nindent 8 }}
+    spec:
+      serviceAccount: s3-getput ## add service account
+      containers:
+      - image: "{{ .Values.api.image.username }}/{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
+        name: {{ .Values.api.name }}
+        ports:
+        - containerPort: {{ .Values.api.service.port }}
+        env:
+        - name: BUCKET_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: bucket-name
+              key: bucket_name
+        - name: AWS_REGION
+          value: {{ .Values.config.aws_region }}
+        {{- if .Values.api.resources }}
+        resources:
+        {{- toYaml .Values.api.resources | nindent 10}}
+        {{- end}}

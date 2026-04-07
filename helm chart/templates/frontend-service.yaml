@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: "{{ .Values.frontend.name }}-service"
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    {{- include "frontend.labels" . | nindent 4}}
+  type: {{ .Values.frontend.service.type }}
+  ports:
+  - targetPort: {{ .Values.frontend.service.port }}
+    protocol: TCP
+    port: {{ .Values.frontend.service.port }}

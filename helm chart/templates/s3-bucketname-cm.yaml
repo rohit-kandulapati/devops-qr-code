@@ -1,0 +1,7 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: bucket-name
+  namespace: {{ .Values.namespace }}
+data:
+  bucket_name: {{ .Values.config.bucket_name }}
